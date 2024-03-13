@@ -36,19 +36,65 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  handleEdit(userId: number) {
+  handleCreate() {
+    // Modal config options
     const modalRef = this.modalService.open(UserModalComponent, {
+      backdrop: 'static',
       size: 'xl',
       centered: true,
-      windowClass: 'dark-modal',
+      keyboard: false,
     });
 
-    modalRef.componentInstance.data = { id: userId };
+    // Bind modal data
+    modalRef.componentInstance.data = { title: '# Create User' };
 
     // Handle the modal result
     modalRef.result.then(
       (result) => {
-        console.log('Modal closed with result:', result);
+        if (result && result !== 'Cancel') {
+          this.userService.addUser(result).subscribe({
+            next: (response: any) => {
+              this.getAllUser();
+              console.log('User created...', response);
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+        }
+      },
+      (reason) => {
+        console.log('Modal dismissed with reason:', reason);
+      },
+    );
+  }
+
+  handleEdit(userId: string) {
+    // Modal config options
+    const modalRef = this.modalService.open(UserModalComponent, {
+      backdrop: 'static',
+      size: 'xl',
+      centered: true,
+      keyboard: false,
+    });
+
+    // Bind modal data
+    modalRef.componentInstance.data = { id: userId, title: '# Update User' };
+
+    // Handle the modal result
+    modalRef.result.then(
+      (result) => {
+        if (result && result !== 'Cancel') {
+          this.userService.updateUser(userId, result).subscribe({
+            next: (response: any) => {
+              this.getAllUser();
+              console.log('User updated...', response);
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+        }
       },
       (reason) => {
         console.log('Modal dismissed with reason:', reason);
