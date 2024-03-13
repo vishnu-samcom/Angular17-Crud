@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/interfaces/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserModalComponent } from '../../shared/components/user-modal/user-modal.component';
+import { UserService, NotificationService } from '../../shared/services';
+import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-users',
@@ -13,11 +14,12 @@ import { UserModalComponent } from '../../shared/components/user-modal/user-moda
   styleUrl: './users.component.scss',
 })
 export class UsersComponent implements OnInit {
-  userList: any;
+  userList: User[] = [];
 
   constructor(
     private userService: UserService,
     private modalService: NgbModal,
+    private notification: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -26,12 +28,13 @@ export class UsersComponent implements OnInit {
 
   getAllUser() {
     this.userService.getUserList().subscribe({
-      next: (response: User) => {
+      next: (response: any) => {
         this.userList = response;
-        // console.log(this.userList);
+        this.userList.reverse();
       },
       error: (error) => {
         console.error(error);
+        this.notification.error(error.message);
       },
     });
   }
@@ -55,10 +58,11 @@ export class UsersComponent implements OnInit {
           this.userService.addUser(result).subscribe({
             next: (response: any) => {
               this.getAllUser();
-              console.log('User created...', response);
+              this.notification.success('User created successfully! :)');
             },
             error: (error) => {
               console.error(error);
+              this.notification.error(error.message);
             },
           });
         }
@@ -88,10 +92,11 @@ export class UsersComponent implements OnInit {
           this.userService.updateUser(userId, result).subscribe({
             next: (response: any) => {
               this.getAllUser();
-              console.log('User updated...', response);
+              this.notification.success('User updated successfully! :)');
             },
             error: (error) => {
               console.error(error);
+              this.notification.error(error.message);
             },
           });
         }
@@ -102,7 +107,38 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  handleDelete(userId: number) {
-    console.log(userId);
+  handleDelete(userId: string, name: string) {
+    // Modal config options
+    const modalRef = this.modalService.open(DeleteDialogComponent, {
+      backdrop: 'static',
+      centered: true,
+      keyboard: false,
+    });
+
+    const deleteMessage = `Are you sure you want to delete ${name}?`;
+
+    // Bind modal data
+    modalRef.componentInstance.data = { title: '# Confirm Deletion', message: deleteMessage };
+
+    // Handle the modal result
+    modalRef.result.then(
+      (result) => {
+        if (result && result === 'Delete confirmed') {
+          this.userService.deleteUser(userId).subscribe({
+            next: (response: any) => {
+              this.getAllUser();
+              this.notification.success('User deleted successfully! :)');
+            },
+            error: (error) => {
+              console.error(error);
+              this.notification.error(error.message);
+            },
+          });
+        }
+      },
+      (reason) => {
+        console.log('Modal dismissed with reason:', reason);
+      },
+    );
   }
 }

@@ -27,4 +27,8 @@ export class UserService {
   addUser(payload: any): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}${API_ENDPOINTS.API_ADD_USER}`, payload);
   }
+
+  deleteUser(id: string): Observable<User> {
+    return this.http.delete<User>(`${this.apiUrl}${API_ENDPOINTS.API_DELETE_USER}/${id}`);
+  }
 }

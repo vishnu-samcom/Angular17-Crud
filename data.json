@@ -184,17 +184,10 @@
     },
     {
       "first_name": "Reid",
-      "last_name": "Walsh",
+      "last_name": "Walshh",
       "email": "Dallin.DAmore89@gmail.com",
       "phone": "606-623-3306",
       "id": "27"
-    },
-    {
-      "first_name": "Tina",
-      "last_name": "Gold",
-      "email": "test@gmail.com",
-      "phone": "999-444-0099",
-      "id": "9eb4"
     }
   ],
   "accounts": [
@@ -253,6 +246,29 @@
     {
       "id": "1",
       "status": ""
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Product 1",
+      "price": 19.99,
+      "imageUrl": "https://via.placeholder.com/100",
+      "description": "Description for Product 1"
+    },
+    {
+      "id": "2",
+      "name": "Product 2",
+      "price": 29.99,
+      "imageUrl": "https://via.placeholder.com/100",
+      "description": "Description for Product 2"
+    },
+    {
+      "id": "3",
+      "name": "Product 3",
+      "price": 219.99,
+      "imageUrl": "https://via.placeholder.com/100",
+      "description": "Description for Product 3"
     }
   ]
 }

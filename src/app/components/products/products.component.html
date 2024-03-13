@@ -1,1 +1,19 @@
-<p>{{title}}</p>
+<div class="container mt-4">
+    <h5># Our Products</h5>
+    <hr>
+    <div class="row">
+        @for (product of products; track product.id) {
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card">
+                <img [src]="product.imageUrl" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text"><strong>${{ product.price.toFixed(2) }}</strong></p>
+                    <!-- <a href="#" class="btn btn-primary">Add to Cart</a> -->
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
